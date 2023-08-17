@@ -22,7 +22,7 @@ const getStudentsById = (req,res) => {
 
 //add student
 const addStudents = (req, res) => {
-  const { name, email, age, dob } = req.body;
+  const { name, email, age, dob, createdat, updatedat } = req.body;
 
   // Validate email
   pool.query(queries.checkEmailExist, [email], (error, results) => {
@@ -37,8 +37,8 @@ const addStudents = (req, res) => {
     } else {
       // Add student to DB
       pool.query(
-        'INSERT INTO student (name, email, age, dob) VALUES ($1, $2, $3, $4)',
-        [name, email, age, dob],
+        'INSERT INTO student (name, email, age, dob, createdat, updatedat) VALUES ($1, $2, $3, $4, $5, $6)',
+        [name, email, age, dob, createdat, updatedat],
         (insertError, insertResults) => {
           if (insertError) {
             console.error('Error adding student:', insertError);
@@ -53,12 +53,14 @@ const addStudents = (req, res) => {
 };
 
 //delete studen
-const removeStudent = (req, res) => {
+const deleteStudent = (req, res) => {
   const studentId = req.params.id;
 
   // Delete student from DB by ID
+  // pool.query(queries.getStudents, (error, results) =>{
+
   pool.query(
-    'DELETE FROM student WHERE id = $1',
+    queries.removeStudent,
     [studentId],
     (error, results) => {
       if (error) {
@@ -107,7 +109,7 @@ module.exports = {
   getStudents,
   getStudentsById,
   addStudents,
-  removeStudent,
+  deleteStudent,
   updateStudent,
   // Export more controller functions here
 };
