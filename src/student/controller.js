@@ -2,31 +2,6 @@
 const pool = require('../../db'); // Import the database configuration
 const queries =  require('../student/queries')
 
-// Get all students
-// const getStudents = async (req, res) => {
-//   try {
-//     const { rows } = await pool.query('SELECT * FROM students');
-//     res.json(rows);
-//   } catch (error) {
-//     console.error('Error fetching students:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
-
-// // Create a new student
-// const createStudent = async (req, res) => {
-//   const { name, age, major } = req.body;
-//   try {
-//     const { rows } = await pool.query(
-//       'INSERT INTO students (name, age, major) VALUES ($1, $2, $3) RETURNING *',
-//       [name, age, major]
-//     );
-//     res.json(rows[0]);
-//   } catch (error) {
-//     console.error('Error creating student:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// };
 
 //getsemuastuden
 const getStudents = (req,res) => {
@@ -77,6 +52,53 @@ const addStudents = (req, res) => {
   });
 };
 
+//delete studen
+const removeStudent = (req, res) => {
+  const studentId = req.params.id;
+
+  // Delete student from DB by ID
+  pool.query(
+    'DELETE FROM student WHERE id = $1',
+    [studentId],
+    (error, results) => {
+      if (error) {
+        console.error('Error deleting student:', error);
+        res.status(500).send('An error occurred.');
+      } else {
+        if (results.rowCount === 0) {
+          res.status(404).send('Student not found');
+        } else {
+          res.status(200).send('Student deleted successfully');
+        }
+      }
+    }
+  );
+};
+
+//update student
+const updateStudent = (req, res) => {
+  const studentId = req.params.id;
+  const { name, email, age, dob } = req.body;
+
+  // Update student in DB by ID
+  pool.query(
+    'UPDATE student SET name = $1, email = $2, age = $3, dob = $4 WHERE id = $5',
+    [name, email, age, dob, studentId],
+    (error, results) => {
+      if (error) {
+        console.error('Error updating student:', error);
+        res.status(500).send('An error occurred.');
+      } else {
+        if (results.rowCount === 0) {
+          res.status(404).send('Student not found');
+        } else {
+          res.status(200).send('Student updated successfully');
+        }
+      }
+    }
+  );
+};
+
   
 
 // ... Add more controller functions ...
@@ -85,5 +107,7 @@ module.exports = {
   getStudents,
   getStudentsById,
   addStudents,
+  removeStudent,
+  updateStudent,
   // Export more controller functions here
 };
