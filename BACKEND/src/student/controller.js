@@ -74,7 +74,7 @@ const updateStudent = (req, res) => {
   // Update student in DB by ID
   pool.query(
     // 'UPDATE student SET name = $1, email = $2, age = $3, dob = $4 WHERE id = $5',
-    queries.updateStudent,
+    queries.updateStudentById,
     [name, email, age, dob, updatedat, studentId],
     (error, results) => {
       if (error) {
