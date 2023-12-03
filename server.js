@@ -6,10 +6,10 @@ const port = 3000;
 
 app.use(express.json());
 app.get("/", (req,res) => {
-    res.send('hello world');
+    res.send('hello deni');
 });
 
 app.use('/api/v1/students', studentRoutes);
 
 
-app.listen(port, () => console.log(`app listen on port ${port}`));
+app.listen(port, () => console.log(`APLIKASI TERSAMBUNG PADA PORT ${port}`));

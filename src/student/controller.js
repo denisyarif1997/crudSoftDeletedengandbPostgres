@@ -37,7 +37,8 @@ const addStudents = (req, res) => {
     } else {
       // Add student to DB
       pool.query(
-        'INSERT INTO student (name, email, age, dob, createdat, updatedat) VALUES ($1, $2, $3, $4, $5, $6)',
+        queries.addStudents,
+        // 'INSERT INTO student (name, email, age, dob, createdat, updatedat) VALUES ($1, $2, $3, $4, $5, $6)',
         [name, email, age, dob, createdat, updatedat],
         (insertError, insertResults) => {
           if (insertError) {
@@ -52,40 +53,29 @@ const addStudents = (req, res) => {
   });
 };
 
-//delete studen
+//delete student
 const deleteStudent = (req, res) => {
-  const studentId = req.params.id;
-
-  // Delete student from DB by ID
-  // pool.query(queries.getStudents, (error, results) =>{
-
-  pool.query(
-    queries.removeStudent,
-    [studentId],
-    (error, results) => {
-      if (error) {
-        console.error('Error deleting student:', error);
-        res.status(500).send('An error occurred.');
-      } else {
-        if (results.rowCount === 0) {
-          res.status(404).send('Student not found');
-        } else {
-          res.status(200).send('Student deleted successfully');
-        }
-      }
-    }
-  );
-};
+  const studentId = parseInt(req.params.id);
+  pool.query(queries.removeStudent, [studentId], (error, results) => {
+     if (error) {
+       console.error('Error deleting student:', error);
+       res.status(500).send('An error occurred.');
+     } else {
+       res.status(200).send('Student deleted successfully');
+     }
+  });
+ };
 
 //update student
 const updateStudent = (req, res) => {
   const studentId = req.params.id;
-  const { name, email, age, dob } = req.body;
+  const { name, email, age, dob, updatedat } = req.body;
 
   // Update student in DB by ID
   pool.query(
-    'UPDATE student SET name = $1, email = $2, age = $3, dob = $4 WHERE id = $5',
-    [name, email, age, dob, studentId],
+    // 'UPDATE student SET name = $1, email = $2, age = $3, dob = $4 WHERE id = $5',
+    queries.updateStudent,
+    [name, email, age, dob, updatedat, studentId],
     (error, results) => {
       if (error) {
         console.error('Error updating student:', error);
