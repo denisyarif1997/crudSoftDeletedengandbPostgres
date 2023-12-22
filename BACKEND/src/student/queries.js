@@ -1,4 +1,4 @@
-const getStudents = 'SELECT * FROM student';
+const getStudents = 'SELECT * FROM student where deletedat is null';
 const getStudentsById = 'SELECT * FROM student WHERE id = $1';
 const checkEmailExist = 'SELECT * FROM student WHERE email = $1';
 const addStudents = 'INSERT INTO student (name, email, age, dob, createdat, updatedat) VALUES ($1, $2, $3, $4, $5, $6)';

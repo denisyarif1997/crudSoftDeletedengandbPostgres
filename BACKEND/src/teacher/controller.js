@@ -30,7 +30,7 @@ const updateTeacher = (req,res) => {
     const id = parseInt(req.params.id);
     const { name, subject, email, hire_date, updatedat } = req.body;
 
-    pool.query(queries.updateTeacher, [name, subject, email, hire_date,updatedat, id], (error, results) =>{
+    pool.query(queries.updateTeacherById, [name, subject, email, hire_date, updatedat, id], (error, results) =>{
       if (error)throw error;
       res.status(200).json({"message": "Teacher updated successfully", "body": req.body});
     })
