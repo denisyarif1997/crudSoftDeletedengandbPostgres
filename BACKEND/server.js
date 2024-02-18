@@ -1,6 +1,7 @@
 const express = require ("express")
 const studentRoutes =  require('./src/student/routes')
 const teacherRoutes =  require('./src/teacher/routes')
+const articlesRoutes = require('./src/articles/routes')
 
 
 const app = express();
@@ -12,9 +13,9 @@ app.get("/", (req,res) => {
 });
 
 app.use('/api/v1/students', studentRoutes);
-
 app.use('/api/v1/teacher', teacherRoutes);
+app.use('/api/v1/articles', articlesRoutes);
 
 
 
-app.listen(port, () => console.log(`app listening on port ${port}`));
+app.listen(port, () => console.log(`APP LISTENING ON ${port}`));

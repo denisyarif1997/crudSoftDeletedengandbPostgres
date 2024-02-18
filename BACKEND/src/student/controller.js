@@ -91,6 +91,27 @@ const updateStudent = (req, res) => {
   );
 };
 
+//endpoint mencari nama student
+const getNameStudent = (req, res) => {
+  const name = req.query.s;
+  const query = 'SELECT * FROM student WHERE name LIKE $1';
+  const values = [`%${name}%`];
+ 
+  pool.query(query, values, (error, results) => {
+     if (error) {
+       console.error('Error retrieving student names:', error);
+       res.status(500).send('An error occurred.');
+     } else {
+       if (results.rowCount === 0) {
+         res.status(404).send('No student found with that name');
+       } else {
+         res.status(200).json(results.rows);
+       }
+     }
+  });
+ };
+
+
   
 
 // ... Add more controller functions ...
@@ -101,5 +122,6 @@ module.exports = {
   addStudents,
   deleteStudent,
   updateStudent,
+  getNameStudent
   // Export more controller functions here
 };

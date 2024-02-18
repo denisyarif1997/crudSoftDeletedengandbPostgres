@@ -18,13 +18,30 @@ const getTeacherById = (req,res) => {
  };
 
 const createTeacher = (req,res) => {
-    const { name, subject, email, hire_date,createdat, updatedat } = req.body;
+    const { name, subject, email, notlp, hire_date,createdat, updatedat } = req.body;
 
-    pool.query(queries.createTeacher, [name, subject, email, hire_date, createdat, updatedat], (error, results) =>{
-      if (error)throw error;
-      res.status(201).json({"message": "Teacher added successfully", "body": req.body});
-    })
- };
+    pool.query(queries.checkNoTlp, [notlp], (error, results) => {
+      if (error)  {
+        console.error('Error cheking number phone', error);
+        res.status(500).send('Terjadi kesalahan');
+        return;
+    } 
+    
+    if (results.rows.length) {
+      res.send('No telepon sudah ada');
+    } else {
+      pool.query(queries.createTeacher, [name, subject, email, notlp, hire_date, createdat, updatedat], (error, results) =>{
+        if (error)throw error;
+        res.status(201).json({"message": "Teacher added successfully", "body": req.body});
+      })
+    }
+   });
+  }
+  
+    
+
+
+  
 
 const updateTeacher = (req,res) => {
     const id = parseInt(req.params.id);
@@ -45,10 +62,13 @@ const deleteTeacher = (req,res) => {
     })
  };
 
+
+ 
+
 module.exports = {
     getTeacher,
     getTeacherById,
     createTeacher,
     updateTeacher,
     deleteTeacher
-}
+};
